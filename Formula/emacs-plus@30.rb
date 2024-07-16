@@ -133,7 +133,7 @@ class EmacsPlusAT30 < EmacsBase
     args << "--without-compress-install" if build.without? "compress-install"
 
     ENV.append "CFLAGS", "-g -Og" if build.with? "debug"
-    ENV.append "CFLAGS", "-DFD_SETSIZE=10000 -DDARWIN_UNLIMITED_SELECT"
+    ENV.append "CFLAGS", "-O2 -DFD_SETSIZE=10000 -DDARWIN_UNLIMITED_SELECT"
 
     # Necessary for libgccjit library discovery
     if build.with? "native-comp"
@@ -280,9 +280,6 @@ class EmacsPlusAT30 < EmacsBase
     emacs_info_dir = info/"emacs"
     Dir.glob(emacs_info_dir/"*.info") do |info_filename|
       system "install-info", "--info-dir=#{emacs_info_dir}", info_filename
-    end
-    if build.with? "native-comp"
-      ln_sf "#{Dir[opt_prefix/"lib/emacs/*"].first}/native-lisp", "#{opt_prefix}/Emacs.app/Contents/native-lisp"
     end
   end
 
